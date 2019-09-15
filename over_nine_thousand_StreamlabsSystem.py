@@ -9,11 +9,11 @@ import string
 #---------------------------------------
 # [Required] Script information
 #---------------------------------------
-ScriptName = "boilerplate" #Change this
+ScriptName = "Over Nine Thousand" #Change this
 Website = "https://www.twitch.tv/Timmah_TV"
 Creator = "Timmah_TV"
 Version = "1.0.0"
-Description = "description" #Change this
+Description = "Produces a message when detecting a number is over 9000 xd" #Change this
 #---------------------------------------
 # Versions
 #---------------------------------------
@@ -102,7 +102,7 @@ def Tick():
     """Required tick function"""
     return
 
-
+3
 def OverNineThousandDetector(chatMessage):
     allInstancesOfNumbers = re.findall("[0-9]", chatMessage)
     if int(string.join(allInstancesOfNumbers).replace(" ", "")) > 9000:
