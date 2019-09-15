@@ -5,6 +5,7 @@ import codecs
 import json
 import os
 import re
+import string
 #---------------------------------------
 # [Required] Script information
 #---------------------------------------
@@ -82,17 +83,30 @@ def Init():
     # Command #Change this
     global Command #Change this
     Command = MySettings.Command.lower() #Change this
+    global over9kMessage
+    over9kMessage = "Woah your number is over 9000. Very cool!"
     return
 
 
 def Execute(data):
     if data.IsChatMessage():
-        sendMessage = Parent.SendTwitchMessage if data.IsFromTwitch() else Parent.SendDiscordMessage
-        if data.GetParam(0).lower() == Command: #Change this
-            # Where we process the command
+        if data.IsFromTwitch():
+            Parent.SendTwitchMessage(OverNineThousandDetector(data.Message))
+        elif data.IsFromDiscord():
+            Parent.SendDiscordMessage(OverNineThousandDetector(data.Message))
+
     return
 
 
 def Tick():
     """Required tick function"""
     return
+
+
+def OverNineThousandDetector(chatMessage):
+    allInstancesOfNumbers = re.findall("[0-9]", chatMessage)
+    if int(string.join(allInstancesOfNumbers).replace(" ", "")) > 9000:
+        return over9kMessage
+    #for i in allInstancesOfNumbers:
+    #    if(i > 9000):
+    #        return i
