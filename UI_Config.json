@@ -9,7 +9,7 @@
   },
   "ResponseMessage": {
     "type": "textbox",
-    "value": "the response message sent to chat",
+    "value": "Woah your number is over 9000. Very cool!",
     "label": "Response",
     "tooltip": "popup for hovering over",
     "group": "organized in this group"

@@ -12,13 +12,14 @@ import string
 ScriptName = "Over Nine Thousand" #Change this
 Website = "https://www.twitch.tv/Timmah_TV"
 Creator = "Timmah_TV"
-Version = "1.0.0"
+Version = "1.0.1"
 Description = "Produces a message when detecting a number is over 9000 xd" #Change this
 #---------------------------------------
 # Versions
 #---------------------------------------
 """
 1.0.0 - Initial Release
+1.0.1 - No more error messages please. also fixed detection xd
 """
 #---------------------------------------
 # Variables
@@ -38,7 +39,7 @@ class Settings:
 
         else: #set variables if no custom settings file is found
             self.Command = "command" #Change this
-            self.ResponseMessage = "Response Message" #Change this
+            self.ResponseMessage = "Woah your number is over 9000. Very cool!" #Change this
             self.ErrorMessage = "Error Message" #Change this
 
     # Reload settings on save through UI
@@ -83,18 +84,14 @@ def Init():
     # Command #Change this
     global Command #Change this
     Command = MySettings.Command.lower() #Change this
-    global over9kMessage
-    over9kMessage = "Woah your number is over 9000. Very cool!"
     return
 
 
 def Execute(data):
     if data.IsChatMessage():
-        if data.IsFromTwitch():
-            Parent.SendTwitchMessage(OverNineThousandDetector(data.Message))
-        elif data.IsFromDiscord():
-            Parent.SendDiscordMessage(OverNineThousandDetector(data.Message))
-
+        # Determine if twitch message or discord message
+        SendMessage = Parent.SendTwitchMessage if data.IsFromTwitch() else Parent.SendDiscordMessage
+        SendMessage(OverNineThousandDetector(data.Message))
     return
 
 
@@ -104,9 +101,14 @@ def Tick():
 
 3
 def OverNineThousandDetector(chatMessage):
-    allInstancesOfNumbers = re.findall("[0-9]", chatMessage)
-    if int(string.join(allInstancesOfNumbers).replace(" ", "")) > 9000:
-        return over9kMessage
-    #for i in allInstancesOfNumbers:
-    #    if(i > 9000):
-    #        return i
+
+    totalNumber = ""
+
+    for letter in chatMessage:
+        if(letter.isdigit()):
+            totalNumber += letter
+            if(int(totalNumber) > 9000):
+                return MySettings.ResponseMessage
+
+        else:
+            totalNumber = ""
